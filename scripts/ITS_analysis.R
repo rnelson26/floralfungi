@@ -2,7 +2,7 @@
 
 ### code by RAN and GEB
 
-### Date of most recent update to code: 2-5-2026
+### Date of most recent update to code: 2-19-2026
 
 #### loading relevant packages ####
 library(patchwork)
@@ -717,6 +717,41 @@ asv.vector.plot <- ggplot(fun.nmds.dat,aes(x=NMDS1,y=NMDS2)) +
   scale_color_viridis(discrete = T, option = "C")
 asv.vector.plot
 
+###### Beta dispersion ########
+table(asv.shannon.df$Plant_species)
+
+plant_species <- factor(c(rep(1,33), rep(2,21), rep(3,98)), 
+                        labels = c("Vetch", "Goldfield", "Clover"))
+fung.dist <- vegdist(otu_table(ITS.rel.phy))
+fung.disper <- betadisper(fung.dist, plant_species)
+permutest(fung.disper) 
+
+TukeyHSD(fung.disper)
+
+plot(fung.disper) 
+
+asv.shannon.T %>% filter(Site == "Rock") #to get replicates per site
+table(asv.shannon.T$Site)
+
+sites <- factor(c(rep(1,17), rep(2,11), rep(3,21), rep(4,11), rep(5,25), rep(6,13)),
+                labels = c("Aikawa", "Quarry", "Bertha", "Goatgrass", "Long", "Rock"))
+t.fung.dist <- vegdist(otu_table(T.ITS.rel.phy))
+site.disper <- betadisper(t.fung.dist, sites)
+permutest(site.disper)
+TukeyHSD(site.disper)
+plot(site.disper)
+
+
+table(asv.shannon.T$Site_invasion_level)
+
+sites <- factor(c(rep(1,32), rep(2,28), rep(3,38)),
+                labels = c("Low", "Medium", "High"))
+t.fung.dist <- vegdist(otu_table(T.ITS.rel.phy))
+invas.disper <- betadisper(t.fung.dist, sites)
+permutest(invas.disper)
+TukeyHSD(invas.disper)
+plot(invas.disper)
+
 ############# Diversity Begets Diversity analysis ##############
 ## run the shannon and richness parts first 
 
@@ -939,6 +974,7 @@ ggplot(
     y = "Mean ASV richness",
     color = "Plant species"
   )
+
 
 
 
