@@ -4,6 +4,8 @@
 
 ### Date of most recent update to code: 2-19-2026
 
+#set.seed(22) #I suggest you set a seed when playing around with the code. 
+
 #### loading relevant packages ####
 library(patchwork)
 library(tidyverse)
@@ -704,6 +706,10 @@ fun.asv.scrs$ASV.taxa <- c("Vishniacozyma_victoriae", "Filobasidium_stepposum", 
                            "Podosphaera_sp", "Alternaria_eureka",
                             "Alternaria_sp", "Unk_Nectriaceae", "Sporobolomyces_sp",
                            "Unk")
+
+#the number of ASVs passing the vector correlation changes. You can check the ASV IDs (e.g. ASV.2, ASV.4) in the fun.asv.scrs data frame, and then manually check their names from the taxonomy table. You can check the table by extracting the taxonomy table from the phyloseq object, converting it to a data.frame, and then viewing it. It's recommended to set seed. 
+
+fun.asv.tax <- tax_table(fun.phy) %>% data.frame
 
 asv.vector.plot <- ggplot(fun.nmds.dat,aes(x=NMDS1,y=NMDS2)) +
   geom_point(aes(color=Plant_species),size=4) +
